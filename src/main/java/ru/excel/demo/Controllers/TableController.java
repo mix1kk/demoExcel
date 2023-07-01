@@ -27,6 +27,7 @@ public class TableController {
     @PatchMapping("/{id}")
     public String editTable(@ModelAttribute("line") @Valid Line line, BindingResult bindingResult, @PathVariable Integer id){
         line.setId(id);
+        //заполняем все поля, которые не передались через ModelAttribute
         Line newLine = lineService.findOne(id);
         if (line.getA()==null)
             line.setA(newLine.getA());
@@ -36,6 +37,10 @@ public class TableController {
             line.setC(newLine.getC());
         if (line.getD()==null)
             line.setD(newLine.getD());
+        line.setHidden_a(newLine.getHidden_a());
+        line.setHidden_b(newLine.getHidden_b());
+        line.setHidden_c(newLine.getHidden_c());
+        line.setHidden_d(newLine.getHidden_d());
         if(bindingResult.hasErrors()) {
             return "redirect:/table";
         }
