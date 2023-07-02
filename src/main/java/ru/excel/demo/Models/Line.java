@@ -7,11 +7,10 @@ import org.springframework.stereotype.Component;
 @Component
 @Entity
 @Table(name = "line")
-public class Line {
+public class Line  implements Comparable <Line>{
     static final String regex = "\\-?(\\d*\\.)?\\d+|(=\\(*\\-?[ABCD][1-4]|=\\(*\\-?(\\d*\\.)?\\d+)([\\+\\-\\*\\/]\\(*[ABCD][1-4]\\)*|[\\+\\-\\*\\/]\\(*(\\d*\\.)?\\d+\\)*)*";
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Pattern(regexp = regex, message = "Expression Error")
     @Column(name = "a")
@@ -35,6 +34,22 @@ public class Line {
     private String d;
     @Column(name = "hidden_d")
     private String hidden_d;
+
+    public Line(int id, String a, String hidden_a, String b, String hidden_b, String c, String hidden_c, String d, String hidden_d) {
+        this.id = id;
+        this.a = a;
+        this.hidden_a = hidden_a;
+        this.b = b;
+        this.hidden_b = hidden_b;
+        this.c = c;
+        this.hidden_c = hidden_c;
+        this.d = d;
+        this.hidden_d = hidden_d;
+    }
+
+    public Line() {
+
+    }
 
 
     public int getId() {
@@ -107,5 +122,14 @@ public class Line {
 
     public void setD(String d) {
         this.d = d;
+    }
+
+    @Override
+    public int compareTo(Line o) {
+        if (id == o.id)
+        return 0;
+        else if (id<o.id)
+            return -1;
+        else return 1;
     }
 }

@@ -20,23 +20,19 @@
             <td style="border: 1px solid grey">
                 <form th:method="PATCH" th:action="@{/table/{id} (id=${line.getId})}" th:object="${line}">
                     <input th:name=a th:value="${line.a}">
-<!--                    <div style = "color:red" th:if="${#${line.a.hasErrors()}}" th:errors = "*{a}">A Column Errors</div>-->
             </form>
             </td>
             <td style="border: 1px solid grey">
                 <form th:method="PATCH" th:action="@{/table/{id} (id=${line.getId})}" th:object="${line}">
                 <input th:name=b th:value="${line.b}" >
-<!--                    <div style = "color:red" th:if="${#fields.hasErrors('b')}" th:errors = "*{b}">B Column Errors</div>-->
             </form></td>
             <td style="border: 1px solid grey">
                 <form th:method="PATCH" th:action="@{/table/{id} (id=${line.getId})}" th:object="${line}">
                 <input th:name=c th:value="${line.c}" >
-<!--                    <div style = "color:red" th:if="${#fields.hasErrors('c')}" th:errors = "*{a}">C Column Errors</div>-->
             </form></td>
             <td style="border: 1px solid grey">
                 <form th:method="PATCH" th:action="@{/table/{id} (id=${line.getId})}" th:object="${line}">
                 <input th:name=d th:value="${line.d}" >
-<!--                    <div style = "color:red" th:if="${#fields.hasErrors('d')}" th:errors = "*{d}">D Column Errors</div>-->
             </form></td>
         </tr>
     </table>

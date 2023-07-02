@@ -5,42 +5,78 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Calculator {
-    public static List<String> tokenizeAndMakePolishRevert (String expression,List<Line> listLines){
-        Pattern digitsPattern = Pattern.compile(("(\\d*\\.)?\\d+"));
-        Pattern addressPattern = Pattern.compile(("[ABCD][1-4]"));
+    public static Line recalculateLine(Line line, List<Line> listLines){
+        //проверка на обычное число
+        Pattern digitsPattern = Pattern.compile(("\\-?(\\d*\\.)?\\d+"));
+        //пересчитываем значение поля А
+        String expression = line.getHidden_a();
+       // line.setHidden_a(expression);
+        Matcher matcher = digitsPattern.matcher(expression);
+        if(!matcher.matches()) {
+            line.setA(Calculator.calculate(Calculator.makePolishRevert(expression.replace("=", ""), listLines)).toString());
+        }
+        //пересчитываем значение поля B
+        expression = line.getHidden_b();
+      //  line.setHidden_b(expression);
+        matcher = digitsPattern.matcher(expression);
+        if(!matcher.matches()) {
+            line.setB(Calculator.calculate(Calculator.makePolishRevert(expression.replace("=", ""), listLines)).toString());
+        }
+        //пересчитываем значение поля C
+        expression = line.getHidden_c();
+      //  line.setHidden_c(expression);
+        matcher = digitsPattern.matcher(expression);
+        if(!matcher.matches()) {
+            line.setC(Calculator.calculate(Calculator.makePolishRevert(expression.replace("=", ""), listLines)).toString());
+        }
+        //пересчитываем значение поля D
+        expression = line.getHidden_d();
+      //  line.setHidden_d(expression);
+        matcher = digitsPattern.matcher(expression);
+        if(!matcher.matches()) {
+            line.setD(Calculator.calculate(Calculator.makePolishRevert(expression.replace("=", ""), listLines)).toString());
+        }
+        return line;
+    }
+    public static List<String> makePolishRevert(String expression, List<Line> listLines){
+        Pattern digitsPattern = Pattern.compile(("(\\-?\\+?\\d*\\.)?\\d+"));
+        Pattern addressPattern = Pattern.compile(("\\-?[ABCD][1-4]"));
         //итоговая строка в обратной польской записи
         List<String> result = new ArrayList<>();
+
         //стек операций
         Deque<String> operationStack = new LinkedList<>();
-        StringTokenizer tokenizer = new StringTokenizer(expression.replace("=","")," +-*/()",true);
-        while (tokenizer.hasMoreTokens()) {
-            String token = tokenizer.nextToken();
-            Matcher matcher1 = digitsPattern.matcher(token);
-            Matcher matcher2 = addressPattern.matcher(token);
+        List<String> tokens = Tokenizer.getTokens(expression.replace("=",""));
+//        StringTokenizer tokenizer = new StringTokenizer(expression.replace("=","")," +-*/()",true);
+        for (int i = 0; i<tokens.size();i++) {
+ //           String token = tokenizer.nextToken();
+//            System.out.println(token);
+            Matcher matcher1 = digitsPattern.matcher(tokens.get(i));
+            Matcher matcher2 = addressPattern.matcher(tokens.get(i));
             //если число, то кладем в результат
             if(matcher1.matches())
-                result.add(token);
+                result.add(tokens.get(i));
             //если ссылка на ячейку, получаем число из ячейки и кладем в результат
             if(matcher2.matches()){
-                String [] splittedToken = token.split("");
-                switch (splittedToken[0]) {
-                    case "A": token = listLines.get(Integer.parseInt(splittedToken[1])-1).getA();
-                    break;
-                    case "B": token = listLines.get(Integer.parseInt(splittedToken[1])-1).getB();
-                    break;
-                    case "C": token = listLines.get(Integer.parseInt(splittedToken[1])-1).getC();
-                    break;
-                    case "D": token = listLines.get(Integer.parseInt(splittedToken[1])-1).getD();
-                    break;
-                }
-
-                result.add(token);
+                 String [] splittedToken = tokens.get(i).replace("-","").split("");
+                 String token = switch (splittedToken[0]) {
+//                    case "A" ->  listLines.get(Integer.parseInt(splittedToken[1])-1).getA();
+                    case "B" ->  listLines.get(Integer.parseInt(splittedToken[1])-1).getB();
+                    case "C" ->  listLines.get(Integer.parseInt(splittedToken[1])-1).getC();
+                    case "D" ->  listLines.get(Integer.parseInt(splittedToken[1])-1).getD();
+                     default -> listLines.get(Integer.parseInt(splittedToken[1])-1).getA();
+                };
+                 if(tokens.get(i).startsWith("-")&&(!token.startsWith("-"))) {
+                     result.add("-" + token);
+                 }
+                 else
+                     result.add(token.replace("-",""));
             }
             //если открывающая скобка, кладем в стек
-            if (token.equals("("))
-                operationStack.push(token);
+            if (tokens.get(i).equals("("))
+                operationStack.push(tokens.get(i));
             //если закрывающая скобка, все операции из стека добавляем в результат
-            if (token.equals(")")){
+            if (tokens.get(i).equals(")")){
                 while (!operationStack.isEmpty()&&!operationStack.peek().equals("(")) {
                     result.add(operationStack.pop());
                 }
@@ -48,18 +84,18 @@ public class Calculator {
              operationStack.pop();
             }
             // если плюс или минус, то в соответствии с приоритетом извлекаем из стека умножение и деление,а в стек помещаем сложение или вычитание
-            if (token.equals("+")||token.equals("-")){
+            if (tokens.get(i).equals("+")||tokens.get(i).equals("-")){
                 while (!operationStack.isEmpty()&&(operationStack.peek().equals("*")||operationStack.peek().equals("/")||
                         operationStack.peek().equals("+")||operationStack.peek().equals("-"))) {
                     result.add(operationStack.pop());
                 }
-            operationStack.push(token);
+            operationStack.push(tokens.get(i));
             }
-            if (token.equals("*")||token.equals("/")){
+            if (tokens.get(i).equals("*")||tokens.get(i).equals("/")){
                 while (!operationStack.isEmpty()&&(operationStack.peek().equals("*")||operationStack.peek().equals("/"))) {
                     result.add(operationStack.pop());
                 }
-                operationStack.push(token);
+                operationStack.push(tokens.get(i));
             }
 
         }
@@ -67,12 +103,40 @@ public class Calculator {
         while ((!operationStack.isEmpty())){
             result.add(operationStack.pop());
         }
-        for (int i=0; i< result.size();i++){
-           System.out.println(result.get(i));}
-
+        for (int i =0; i< result.size()-1;i++){
+            if(result.get(i).equals("-")&&result.get(i).equals(result.get(i+1))) {
+                result.set(i+1,"+");
+                result.remove(i);
+            }
+        }
         return result;
     }
-//    public static calculate(){
-//
-//    }
+    public static Double calculate(List<String> tokens){
+//        for (String token : tokens){
+//            System.out.println(token);
+//        }
+        Pattern digitsPattern = Pattern.compile(("\\-?(\\d*\\.)?\\d+"));
+
+        //создаем стек для вычислений по обратной польской записи
+        Deque<Double> valueStack = new LinkedList<>();
+        for (String token : tokens){
+            Matcher matcher = digitsPattern.matcher(token);
+            if (matcher.matches())
+                valueStack.push(Double.parseDouble(token));
+            else {
+                Double right = valueStack.pop();
+                Double left = valueStack.pop();
+                Double result = switch (token){
+                    case "+" -> left + right;
+                    case "-" -> left - right;
+                    case "*" -> left * right;
+                    case "/" -> left / right;
+                    default -> 0.0;
+                    };
+                valueStack.push(result);
+                }
+
+        }
+        return valueStack.pop();
+    }
 }
