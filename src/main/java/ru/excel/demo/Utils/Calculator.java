@@ -5,7 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Calculator {
-    public static Line recalculateLine(Line line, List<Line> listLines){
+    public static Line recalculateLine(Line line, List<Line> listLines) throws Exception {
         //проверка на обычное число
         Pattern digitsPattern = Pattern.compile(("\\-?(\\d*\\.)?\\d+"));
         //пересчитываем значение поля А
@@ -13,32 +13,46 @@ public class Calculator {
        // line.setHidden_a(expression);
         Matcher matcher = digitsPattern.matcher(expression);
         if(!matcher.matches()) {
-            line.setA(Calculator.calculate(Calculator.makePolishRevert(expression.replace("=", ""), listLines)).toString());
+            String temp = Calculator.calculate(Calculator.makePolishRevert(expression.replace("=", ""), listLines)).toString();
+            if (temp.matches("\\-?\\d+\\.[0]"))
+            line.setA(temp.replaceAll("\\.[0]",""));
+            else line.setA(temp);
         }
         //пересчитываем значение поля B
         expression = line.getHidden_b();
       //  line.setHidden_b(expression);
         matcher = digitsPattern.matcher(expression);
         if(!matcher.matches()) {
-            line.setB(Calculator.calculate(Calculator.makePolishRevert(expression.replace("=", ""), listLines)).toString());
+            String temp = Calculator.calculate(Calculator.makePolishRevert(expression.replace("=", ""), listLines)).toString();
+            if (temp.matches("\\-?\\d+\\.[0]"))
+                line.setB(temp.replaceAll("\\.[0]",""));
+            else line.setB(temp);
         }
         //пересчитываем значение поля C
         expression = line.getHidden_c();
       //  line.setHidden_c(expression);
         matcher = digitsPattern.matcher(expression);
         if(!matcher.matches()) {
-            line.setC(Calculator.calculate(Calculator.makePolishRevert(expression.replace("=", ""), listLines)).toString());
+            String temp = Calculator.calculate(Calculator.makePolishRevert(expression.replace("=", ""), listLines)).toString();
+            if (temp.matches("\\-?\\d+\\.[0]"))
+                line.setC(temp.replaceAll("\\.[0]",""));
+            else line.setC(temp);
         }
         //пересчитываем значение поля D
         expression = line.getHidden_d();
       //  line.setHidden_d(expression);
         matcher = digitsPattern.matcher(expression);
         if(!matcher.matches()) {
-            line.setD(Calculator.calculate(Calculator.makePolishRevert(expression.replace("=", ""), listLines)).toString());
+            String temp = Calculator.calculate(Calculator.makePolishRevert(expression.replace("=", ""), listLines)).toString();
+            if (temp.matches("\\-?\\d+\\.[0]"))
+                line.setD(temp.replaceAll("\\.[0]",""));
+            else line.setD(temp);
         }
         return line;
     }
-    public static List<String> makePolishRevert(String expression, List<Line> listLines){
+    public static List<String> makePolishRevert(String expression, List<Line> listLines) throws Exception {
+
+
         Pattern digitsPattern = Pattern.compile(("(\\-?\\+?\\d*\\.)?\\d+"));
         Pattern addressPattern = Pattern.compile(("\\-?[ABCD][1-4]"));
         //итоговая строка в обратной польской записи
@@ -66,11 +80,15 @@ public class Calculator {
                     case "D" ->  listLines.get(Integer.parseInt(splittedToken[1])-1).getD();
                      default -> listLines.get(Integer.parseInt(splittedToken[1])-1).getA();
                 };
-                 if(tokens.get(i).startsWith("-")&&(!token.startsWith("-"))) {
-                     result.add("-" + token);
+                 //блок для исключения двойных минусов
+                 if(tokens.get(i).startsWith("-")) {
+                     if (token.startsWith("-"))
+                         result.add(token.replace("-",""));
+                     else result.add("-" + token);
                  }
                  else
-                     result.add(token.replace("-",""));
+                    // result.add(token.replace("-",""));
+                        result.add(token);
             }
             //если открывающая скобка, кладем в стек
             if (tokens.get(i).equals("("))
@@ -103,12 +121,13 @@ public class Calculator {
         while ((!operationStack.isEmpty())){
             result.add(operationStack.pop());
         }
-        for (int i =0; i< result.size()-1;i++){
-            if(result.get(i).equals("-")&&result.get(i).equals(result.get(i+1))) {
-                result.set(i+1,"+");
-                result.remove(i);
-            }
-        }
+//        for (int i =0; i< result.size()-1;i++){
+//            if(result.get(i).equals("-")&&result.get(i).equals(result.get(i+1))) {
+//                result.set(i+1,"+");
+//                result.remove(i);
+//            }
+//        }
+
         return result;
     }
     public static Double calculate(List<String> tokens){

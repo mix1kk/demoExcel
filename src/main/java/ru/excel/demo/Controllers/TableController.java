@@ -27,7 +27,7 @@ public class TableController {
         return "excelTable";
     }
     @PatchMapping("/{id}")
-    public String editTable(@ModelAttribute("line") @Valid Line newLine, BindingResult bindingResult, @PathVariable Integer id){
+    public String editTable(@ModelAttribute("line") @Valid Line newLine, BindingResult bindingResult, @PathVariable Integer id) throws Exception {
         if(bindingResult.hasErrors())
             return "redirect:/table";
 
@@ -61,4 +61,4 @@ public class TableController {
         }
 
 }
-//todo: проверка на нуль при делении, проверка на ссылку на саму себя,проверка на циклические ссылки, тип числа, непарное число скобок
+//todo: проверка на нуль при делении, проверка на ссылку на саму себя,проверка на циклические ссылки,

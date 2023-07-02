@@ -1,11 +1,19 @@
 package ru.excel.demo.Utils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
 public class Tokenizer {
-    public static List<String> getTokens (String expression){
+    public static List<String> getTokens (String expression) throws Exception {
+        String [] stringArray = expression.split("");
+        int counter=0;
+        for(int i = 0; i<stringArray.length;i++){
+            if (stringArray[i].equals("("))
+                counter++;
+            if(stringArray[i].equals(")"))
+                counter--;
+        }
+        if(counter!=0) throw new Exception("Brackets not even");
         List<String> tokens = new ArrayList<>();
         StringTokenizer tokenizer = new StringTokenizer(expression," +-*/()",true);
         while (tokenizer.hasMoreTokens()) {

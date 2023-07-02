@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class TokenizerTest {
 
     @Test
-    void testGetTokens() {
+    void testGetTokens() throws Exception {
         String expression = "-1-2+(-A2)";
         List<String> expected = Arrays.asList("-1","-","2","+","(","-A2",")");
         assertEquals(expected,Tokenizer.getTokens(expression));

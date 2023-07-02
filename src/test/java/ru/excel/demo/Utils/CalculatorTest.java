@@ -22,7 +22,7 @@ class CalculatorTest {
     }
 
     @Test
-    void testMakePolishRevert() {
+    void testMakePolishRevert() throws Exception {
         String expression = "(5-6)*7";
         List<String> expected = Arrays.asList("5", "6","-","7","*");
         List < Line > listLines = new ArrayList<>();

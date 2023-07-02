@@ -8,13 +8,13 @@ import org.springframework.stereotype.Component;
 @Entity
 @Table(name = "line")
 public class Line  implements Comparable <Line>{
-    static final String regex = "\\-?(\\d*\\.)?\\d+|(=\\(*\\-?[ABCD][1-4]|=\\(*\\-?(\\d*\\.)?\\d+)([\\+\\-\\*\\/]\\(*[ABCD][1-4]\\)*|[\\+\\-\\*\\/]\\(*(\\d*\\.)?\\d+\\)*)*";
+    static final String regex = "\\-?(\\d*\\.)?\\d+|(=\\-?\\(*\\-?[ABCD][1-4]\\)*|=\\-?\\(*\\-?(\\d*\\.)?\\d+\\)*)([\\+\\-\\*\\/]\\(*\\-?[ABCD][1-4]\\)*|[\\+\\-\\*\\/]\\(*\\-?(\\d*\\.)?\\d+\\)*)*";
     @Id
     @Column(name = "id")
     private int id;
     @Pattern(regexp = regex, message = "Expression Error")
     @Column(name = "a")
-    private String a;
+    public String a;
 
     //Пришлось отступить от принятой конвенции CamelCase т.к. Spring JPA по умолчанию использует другой формат поиска в базе
     @Column(name = "hidden_a")

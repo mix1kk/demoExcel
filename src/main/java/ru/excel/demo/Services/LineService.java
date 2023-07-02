@@ -36,14 +36,14 @@ public class LineService {
     }
 
 
-    public void update(Integer id, Line updatedLine){
+    public void update(Integer id, Line updatedLine) throws Exception {
         List<Line> listLines = new ArrayList<>(lineRepository.findAll().stream().sorted().collect(Collectors.toList()));
         updatedLine.setId(id);
         Calculator.recalculateLine(updatedLine,listLines);
-//        lineRepository.save(updatedLine);
-        listLines.set(id,updatedLine);
+        lineRepository.save(updatedLine);
+ //       listLines.set(id,updatedLine);
         for(Line line : listLines){
-            if(id!=line.getId())
+           // if(id!=line.getId())
             Calculator.recalculateLine(line,listLines);
         }
         lineRepository.saveAll(listLines);
