@@ -29,6 +29,12 @@ public class LineService {
 //        lineRepository.saveAll(lines);
 //    }
     public List<Line> findAll(){
+        if(lineRepository.findAll().size()<4) {
+            for (int i = 0; i < 4; i++) {
+                Line line = new Line(i+1, "1", "1", "2", "2", "3", "3", "4", "4");
+                lineRepository.save(line);
+            }
+        }
         return lineRepository.findAll().stream().sorted().collect(Collectors.toList());
     }
     public Line findOne(Integer id){
@@ -49,9 +55,9 @@ public class LineService {
         lineRepository.saveAll(listLines);
     }
 
-//        public void save (Line line){
-//        lineRepository.save(line);
-//    }
+        public void save (Line line) {
+            lineRepository.save(line);
+        }
 //    public void delete (Integer id){
 //        lineRepository.deleteById(id);
 //    }

@@ -25,29 +25,5 @@ services:
         limits:
           cpus: '1'
           memory: 4G
-    networks:
-      - postgres
 
-  pgadmin:
-    container_name: pgadmin_container
-    image: dpage/pgadmin4:6.20
-    environment:
-      PGADMIN_DEFAULT_EMAIL: "adminpostgres"
-      PGADMIN_DEFAULT_PASSWORD: "adminpostgres"
-      PGADMIN_CONFIG_SERVER_MODE: "False"
-    volumes:
-      - ./pgadmin:/var/lib/pgadmin
-    ports:
-      - "5050:80"
-    restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          cpus: '0.5'
-          memory: 1G
-    networks:
-      - postgres
 
-networks:
-  postgres:
-    driver: bridge
