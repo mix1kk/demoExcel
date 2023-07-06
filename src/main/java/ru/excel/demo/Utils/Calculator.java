@@ -5,13 +5,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Calculator {
+    static private final Pattern DIGITSPATTERN = Pattern.compile(("\\-?(\\d*\\.)?\\d+"));
+    static private final Pattern ADDRESSPATTERN = Pattern.compile(("\\-?[ABCD][1-4]"));
     public static Line recalculateLine(Line line, List<Line> listLines) throws Exception {
         //проверка на обычное число
-        Pattern digitsPattern = Pattern.compile(("\\-?(\\d*\\.)?\\d+"));
+
         //пересчитываем значение поля А
         String expression = line.getHiddenFieldA();
-       // line.setHidden_a(expression);
-        Matcher matcher = digitsPattern.matcher(expression);
+        Matcher matcher = DIGITSPATTERN.matcher(expression);
         if(!matcher.matches()) {
             String temp = Calculator.calculate(Calculator.makePolishRevert(expression.replace("=", ""), listLines)).toString();
             if (temp.matches("\\-?\\d+\\.[0]"))
@@ -20,8 +21,7 @@ public class Calculator {
         }
         //пересчитываем значение поля B
         expression = line.getHiddenFieldB();
-      //  line.setHidden_b(expression);
-        matcher = digitsPattern.matcher(expression);
+        matcher = DIGITSPATTERN.matcher(expression);
         if(!matcher.matches()) {
             String temp = Calculator.calculate(Calculator.makePolishRevert(expression.replace("=", ""), listLines)).toString();
             if (temp.matches("\\-?\\d+\\.[0]"))
@@ -30,8 +30,7 @@ public class Calculator {
         }
         //пересчитываем значение поля C
         expression = line.getHiddenFieldC();
-      //  line.setHidden_c(expression);
-        matcher = digitsPattern.matcher(expression);
+        matcher = DIGITSPATTERN.matcher(expression);
         if(!matcher.matches()) {
             String temp = Calculator.calculate(Calculator.makePolishRevert(expression.replace("=", ""), listLines)).toString();
             if (temp.matches("\\-?\\d+\\.[0]"))
@@ -40,8 +39,7 @@ public class Calculator {
         }
         //пересчитываем значение поля D
         expression = line.getHiddenFieldD();
-      //  line.setHidden_d(expression);
-        matcher = digitsPattern.matcher(expression);
+        matcher = DIGITSPATTERN.matcher(expression);
         if(!matcher.matches()) {
             String temp = Calculator.calculate(Calculator.makePolishRevert(expression.replace("=", ""), listLines)).toString();
             if (temp.matches("\\-?\\d+\\.[0]"))
@@ -53,20 +51,16 @@ public class Calculator {
     public static List<String> makePolishRevert(String expression, List<Line> listLines) throws Exception {
 
 
-        Pattern digitsPattern = Pattern.compile(("(\\-?\\+?\\d*\\.)?\\d+"));
-        Pattern addressPattern = Pattern.compile(("\\-?[ABCD][1-4]"));
+
         //итоговая строка в обратной польской записи
         List<String> result = new ArrayList<>();
 
         //стек операций
         Deque<String> operationStack = new LinkedList<>();
         List<String> tokens = Tokenizer.getTokens(expression.replace("=",""));
-//        StringTokenizer tokenizer = new StringTokenizer(expression.replace("=","")," +-*/()",true);
         for (int i = 0; i<tokens.size();i++) {
- //           String token = tokenizer.nextToken();
-//            System.out.println(token);
-            Matcher matcher1 = digitsPattern.matcher(tokens.get(i));
-            Matcher matcher2 = addressPattern.matcher(tokens.get(i));
+            Matcher matcher1 = DIGITSPATTERN.matcher(tokens.get(i));
+            Matcher matcher2 = ADDRESSPATTERN.matcher(tokens.get(i));
             //если число, то кладем в результат
             if(matcher1.matches())
                 result.add(tokens.get(i));
@@ -74,7 +68,6 @@ public class Calculator {
             if(matcher2.matches()){
                  String [] splittedToken = tokens.get(i).replace("-","").split("");
                  String token = switch (splittedToken[0]) {
-//                    case "A" ->  listLines.get(Integer.parseInt(splittedToken[1])-1).getA();
                     case "B" ->  listLines.get(Integer.parseInt(splittedToken[1])-1).getFieldB();
                     case "C" ->  listLines.get(Integer.parseInt(splittedToken[1])-1).getFieldC();
                     case "D" ->  listLines.get(Integer.parseInt(splittedToken[1])-1).getFieldD();
@@ -87,7 +80,6 @@ public class Calculator {
                      else result.add("-" + token);
                  }
                  else
-                    // result.add(token.replace("-",""));
                         result.add(token);
             }
             //если открывающая скобка, кладем в стек
@@ -121,25 +113,14 @@ public class Calculator {
         while ((!operationStack.isEmpty())){
             result.add(operationStack.pop());
         }
-//        for (int i =0; i< result.size()-1;i++){
-//            if(result.get(i).equals("-")&&result.get(i).equals(result.get(i+1))) {
-//                result.set(i+1,"+");
-//                result.remove(i);
-//            }
-//        }
-
         return result;
     }
     public static Double calculate(List<String> tokens){
-//        for (String token : tokens){
-//            System.out.println(token);
-//        }
-        Pattern digitsPattern = Pattern.compile(("\\-?(\\d*\\.)?\\d+"));
 
         //создаем стек для вычислений по обратной польской записи
         Deque<Double> valueStack = new LinkedList<>();
         for (String token : tokens){
-            Matcher matcher = digitsPattern.matcher(token);
+            Matcher matcher = DIGITSPATTERN.matcher(token);
             if (matcher.matches())
                 valueStack.push(Double.parseDouble(token));
             else {
