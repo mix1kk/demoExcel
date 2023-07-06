@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<div >
+<div>
     <table style="border: 1px solid grey;  border-collapse: collapse">
         <tr>
             <th></th>
@@ -15,27 +15,30 @@
             <th style="border: 1px solid grey">C</th>
             <th style="border: 1px solid grey">D</th>
         </tr>
-        <tr th:each = "line, stat : ${AllLines}">
-            <th th:text="${line.getId}", style="border: 1px solid grey"> </th>
+        <tr th:each="line, stat : ${AllLines}">
+            <th th:text="${line.getId}" , style="border: 1px solid grey"></th>
             <td style="border: 1px solid grey">
                 <form th:method="PATCH" th:action="@{/table/{id} (id=${line.getId})}" th:object="${line}">
 
-                    <input th:type = text  th:placeholder="${line.hidden_a}" th:id=*{id} th:name=a th:value="${line.a}">
+                    <input th:type=text th:placeholder="${line.hidden_a}" th:id=*{id} th:name=a th:value="${line.a}">
 
-            </form>
+                </form>
             </td>
             <td style="border: 1px solid grey">
                 <form th:method="PATCH" th:action="@{/table/{id} (id=${line.getId})}" th:object="${line}">
-                <input th:name=b  th:placeholder="${line.hidden_b}" th:value="${line.b}" >
-            </form></td>
+                    <input th:name=b th:placeholder="${line.hidden_b}" th:value="${line.b}">
+                </form>
+            </td>
             <td style="border: 1px solid grey">
                 <form th:method="PATCH" th:action="@{/table/{id} (id=${line.getId})}" th:object="${line}">
-                <input th:name=c th:placeholder="${line.hidden_c}"  th:value="${line.c}" >
-            </form></td>
+                    <input th:name=c th:placeholder="${line.hidden_c}" th:value="${line.c}">
+                </form>
+            </td>
             <td style="border: 1px solid grey">
                 <form th:method="PATCH" th:action="@{/table/{id} (id=${line.getId})}" th:object="${line}">
-                <input th:name=d  th:placeholder="${line.hidden_d}" th:value="${line.d}" >
-            </form></td>
+                    <input th:name=d th:placeholder="${line.hidden_d}" th:value="${line.d}">
+                </form>
+            </td>
         </tr>
     </table>
 

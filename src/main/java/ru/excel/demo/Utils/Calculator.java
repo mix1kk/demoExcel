@@ -9,44 +9,44 @@ public class Calculator {
         //проверка на обычное число
         Pattern digitsPattern = Pattern.compile(("\\-?(\\d*\\.)?\\d+"));
         //пересчитываем значение поля А
-        String expression = line.getHidden_a();
+        String expression = line.getHiddenFieldA();
        // line.setHidden_a(expression);
         Matcher matcher = digitsPattern.matcher(expression);
         if(!matcher.matches()) {
             String temp = Calculator.calculate(Calculator.makePolishRevert(expression.replace("=", ""), listLines)).toString();
             if (temp.matches("\\-?\\d+\\.[0]"))
-            line.setA(temp.replaceAll("\\.[0]",""));
-            else line.setA(temp);
+            line.setFieldA(temp.replaceAll("\\.[0]",""));
+            else line.setFieldA(temp);
         }
         //пересчитываем значение поля B
-        expression = line.getHidden_b();
+        expression = line.getHiddenFieldB();
       //  line.setHidden_b(expression);
         matcher = digitsPattern.matcher(expression);
         if(!matcher.matches()) {
             String temp = Calculator.calculate(Calculator.makePolishRevert(expression.replace("=", ""), listLines)).toString();
             if (temp.matches("\\-?\\d+\\.[0]"))
-                line.setB(temp.replaceAll("\\.[0]",""));
-            else line.setB(temp);
+                line.setFieldB(temp.replaceAll("\\.[0]",""));
+            else line.setFieldB(temp);
         }
         //пересчитываем значение поля C
-        expression = line.getHidden_c();
+        expression = line.getHiddenFieldC();
       //  line.setHidden_c(expression);
         matcher = digitsPattern.matcher(expression);
         if(!matcher.matches()) {
             String temp = Calculator.calculate(Calculator.makePolishRevert(expression.replace("=", ""), listLines)).toString();
             if (temp.matches("\\-?\\d+\\.[0]"))
-                line.setC(temp.replaceAll("\\.[0]",""));
-            else line.setC(temp);
+                line.setFieldC(temp.replaceAll("\\.[0]",""));
+            else line.setFieldC(temp);
         }
         //пересчитываем значение поля D
-        expression = line.getHidden_d();
+        expression = line.getHiddenFieldD();
       //  line.setHidden_d(expression);
         matcher = digitsPattern.matcher(expression);
         if(!matcher.matches()) {
             String temp = Calculator.calculate(Calculator.makePolishRevert(expression.replace("=", ""), listLines)).toString();
             if (temp.matches("\\-?\\d+\\.[0]"))
-                line.setD(temp.replaceAll("\\.[0]",""));
-            else line.setD(temp);
+                line.setFieldD(temp.replaceAll("\\.[0]",""));
+            else line.setFieldD(temp);
         }
         return line;
     }
@@ -75,10 +75,10 @@ public class Calculator {
                  String [] splittedToken = tokens.get(i).replace("-","").split("");
                  String token = switch (splittedToken[0]) {
 //                    case "A" ->  listLines.get(Integer.parseInt(splittedToken[1])-1).getA();
-                    case "B" ->  listLines.get(Integer.parseInt(splittedToken[1])-1).getB();
-                    case "C" ->  listLines.get(Integer.parseInt(splittedToken[1])-1).getC();
-                    case "D" ->  listLines.get(Integer.parseInt(splittedToken[1])-1).getD();
-                     default -> listLines.get(Integer.parseInt(splittedToken[1])-1).getA();
+                    case "B" ->  listLines.get(Integer.parseInt(splittedToken[1])-1).getFieldB();
+                    case "C" ->  listLines.get(Integer.parseInt(splittedToken[1])-1).getFieldC();
+                    case "D" ->  listLines.get(Integer.parseInt(splittedToken[1])-1).getFieldD();
+                     default -> listLines.get(Integer.parseInt(splittedToken[1])-1).getFieldA();
                 };
                  //блок для исключения двойных минусов
                  if(tokens.get(i).startsWith("-")) {

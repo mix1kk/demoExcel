@@ -14,28 +14,28 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: a
+                  name: fieldA
                   type: varchar
               - column:
-                  name: hidden_a
+                  name: hiddenFieldA
                   type: varchar
               - column:
-                  name: b
+                  name: fieldB
                   type: varchar
               - column:
-                  name: hidden_b
+                  name: hiddenFieldB
                   type: varchar
               - column:
-                  name: c
+                  name: fieldC
                   type: varchar
               - column:
-                  name: hidden_c
+                  name: hiddenFieldC
                   type: varchar
               - column:
-                  name: d
+                  name: fieldD
                   type: varchar
               - column:
-                  name: hidden_d
+                  name: hiddenFieldD
                   type: varchar
 
   - changeSet:
@@ -51,26 +51,26 @@ databaseChangeLog:
                   name: id
                   value: 1
               - column:
-                  name: a
+                  name: fieldA
                   value: "1"
               - column:
-                  name: hidden_a
+                  name: hiddenFieldA
                   value: "1"
               - column:
-                  name: b
+                  name: fieldB
                   value: "2"
               - column:
-                  name: hidden_b
+                  name: hiddenFieldB
                   value: "2"
               - column:
-                  name: c
+                  name: fieldC
                   value: "3"
               - column:
-                  name: hidden_c
+                  name: hiddenFieldC
                   value: "3"
               - column:
-                  name: d
+                  name: fieldD
                   value: "4"
               - column:
-                  name: hidden_d
+                  name: hiddenFieldD
                   value: "4"
