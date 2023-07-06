@@ -6,6 +6,6 @@ import ru.excel.demo.Models.Line;
 
 
 @Repository
-public interface LineRepository extends JpaRepository<Line,Integer> {
+public interface LineRepository extends JpaRepository<Line, Integer> {
 
 }

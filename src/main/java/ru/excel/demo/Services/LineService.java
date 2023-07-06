@@ -19,25 +19,24 @@ import java.util.stream.Collectors;
 public class LineService {
     //внедрение зависимости через конструктор
     private final LineRepository lineRepository;
+
     @Autowired
     public LineService(LineRepository lineRepository) {
         this.lineRepository = lineRepository;
     }
     //стандартные CRUD методы для базы данных
 
-//    public void saveAll(List<Line> lines) {
-//        lineRepository.saveAll(lines);
-//    }
-    public List<Line> findAll(){
-        if(lineRepository.findAll().size()<4) {
+    public List<Line> findAll() {
+        if (lineRepository.findAll().size() < 4) {
             for (int i = 0; i < 4; i++) {
-                Line line = new Line(i+1, "1", "1", "2", "2", "3", "3", "4", "4");
+                Line line = new Line(i + 1, "1", "1", "2", "2", "3", "3", "4", "4");
                 lineRepository.save(line);
             }
         }
         return lineRepository.findAll().stream().sorted().collect(Collectors.toList());
     }
-    public Line findOne(Integer id){
+
+    public Line findOne(Integer id) {
         return lineRepository.findById(id).orElse(null);
     }
 
@@ -45,22 +44,15 @@ public class LineService {
     public void update(Integer id, Line updatedLine) throws Exception {
         List<Line> listLines = new ArrayList<>(lineRepository.findAll().stream().sorted().collect(Collectors.toList()));
         updatedLine.setId(id);
-        Calculator.recalculateLine(updatedLine,listLines);
+        Calculator.recalculateLine(updatedLine, listLines);
         lineRepository.save(updatedLine);
- //       listLines.set(id,updatedLine);
-        for(Line line : listLines){
-           // if(id!=line.getId())
-            Calculator.recalculateLine(line,listLines);
+        //       listLines.set(id,updatedLine);
+        for (Line line : listLines) {
+            // if(id!=line.getId())
+            Calculator.recalculateLine(line, listLines);
         }
         lineRepository.saveAll(listLines);
     }
-
-        public void save (Line line) {
-            lineRepository.save(line);
-        }
-//    public void delete (Integer id){
-//        lineRepository.deleteById(id);
-//    }
 
 }
 
